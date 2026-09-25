@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "① 启动前端 (Vite)",
+      "type": "shell",
+      "command": "npm.cmd",
+      "args": ["run", "dev"],
+      "options": { "cwd": "${workspaceFolder}/ui" },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "detail": "前端跑在 3000。停止：在这个终端里按 Ctrl+C"
+    },
+    {
+      "label": "② 启动后端 (无断点调试)",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "args": ["run.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "detail": "后端跑在 8000。要打断点请改用 F5"
+    },
+    {
+      "label": "准备基础环境 (Redis + FAQ)",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/start-env.bat",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true }
+    },
+    {
+      "label": "一键启动全部 (调用 start.bat)",
+      "type": "shell",
+      "command": "${workspaceFolder}/start.bat",
+      "problemMatcher": []
+    },
+    {
+      "label": "安装/更新后端依赖 (uv sync)",
+      "type": "shell",
+      "command": "uv sync",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "安装/更新前端依赖 (npm install)",
+      "type": "shell",
+      "command": "npm.cmd",
+      "args": ["install"],
+      "options": { "cwd": "${workspaceFolder}/ui" },
+      "problemMatcher": []
+    },
+    {
+      "label": "重新导入数据库 (menu.sql)",
+      "type": "shell",
+      "command": "\"C:/Program Files/MySQL/MySQL Server 8.0/bin/mysql.exe\" -h 127.0.0.1 -P 3307 -u root -p --default-character-set=utf8mb4 < menu.sql",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] }
+      },
+      "problemMatcher": [],
+      "detail": "会提示输入密码。注意本项目 MySQL 在 3307（3306 是禅道的）。此任务强制走 cmd 执行：PowerShell 不支持 < 重定向"
+    }
+  ]
+}

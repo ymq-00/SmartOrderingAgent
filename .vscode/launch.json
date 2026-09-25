@@ -1,0 +1,48 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "★ 启动后端（带调试，自动准备 Redis/FAQ）",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/run.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "justMyCode": true,
+      "preLaunchTask": "准备基础环境 (Redis + FAQ)"
+    },
+    {
+      "name": "后端 - 改代码自动重启（开发推荐）",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["api.main:app", "--reload", "--host", "127.0.0.1", "--port", "8000"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "justMyCode": true,
+      "preLaunchTask": "准备基础环境 (Redis + FAQ)"
+    },
+    {
+      "name": "Agent 单独测试（可打断点）",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/agent/langchain_assitant.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "justMyCode": true
+    },
+    {
+      "name": "同步 FAQ 到 Redis",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/agent/redis_data_sync.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "justMyCode": true
+    }
+  ]
+}

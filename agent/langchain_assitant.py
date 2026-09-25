@@ -1,5 +1,5 @@
 """
-用来定义agent的主要的代码，
+用来定义agent的主要的代码,
 """
 from langchain.tools import tool
 import pymysql
@@ -35,8 +35,11 @@ def mysql_connection():
     global engine
     if engine is None:
         from sqlalchemy import create_engine
+        from urllib.parse import quote_plus
+        # 注释：密码里的 @ : / 等特殊字符必须做 URL 编码，
+        # 否则 SQLAlchemy 会把密码里的 @ 当成用户名与主机名的分隔符
         engine = create_engine(
-            url=f"mysql+pymysql://{os.getenv('MYSQL_USERNAME')}:{os.getenv('MYSQL_PASSWORD')}@{os.getenv('MYSQL_HOST')}:{os.getenv('MYSQL_PORT')}/{os.getenv('MYSQL_DATABASE')}",
+            url=f"mysql+pymysql://{quote_plus(os.getenv('MYSQL_USERNAME'))}:{quote_plus(os.getenv('MYSQL_PASSWORD'))}@{os.getenv('MYSQL_HOST')}:{os.getenv('MYSQL_PORT')}/{os.getenv('MYSQL_DATABASE')}",
             pool_size=15
         )
     return engine
@@ -177,7 +180,7 @@ VALUES
     
 async def assistant_query(user_query:str):
     """
-    接收来自前端的用户query，使用agent进行回复
+    接收来自前端的用户query,使用agent进行回复
     """
     agent = await create_agent()
     # 1、调用前，新添加一个system prompt，让agent感知当前的时间
@@ -234,7 +237,12 @@ async def create_agent():
             }
         )
         
-        llm = ChatOpenAI()
+        # 注释：model / base_url 改为从 .env 读取，
+        # 官方 api.openai.com 在国内直连不通，必须走中转或换国内兼容接口
+        llm = ChatOpenAI(
+            model=os.getenv("OPENAI_MODEL") or "gpt-4o-mini",
+            base_url=os.getenv("OPENAI_BASE_URL") or None,
+        )
         with open(str(root_path / 'agent' /"prompts" / 'system_prompt.txt'),encoding="utf-8",mode="r") as f:
             system_prompt = f.read()
         mcp_tools = await client.get_tools()

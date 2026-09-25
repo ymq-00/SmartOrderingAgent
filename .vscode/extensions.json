@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "ms-python.debugpy",
+    "ms-python.vscode-pylance",
+    "vue.volar",
+    "dbaeumer.vscode-eslint",
+    "ms-azuretools.vscode-docker",
+    "cweijan.vscode-mysql-client2"
+  ]
+}

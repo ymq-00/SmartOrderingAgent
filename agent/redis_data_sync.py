@@ -1,5 +1,5 @@
 """
-将FAQ数据，导入到Redis中，用于后续查询
+将FAQ数据,导入到Redis中,用于后续查询
 """
 
 FAQ_ITMES = [
@@ -11,25 +11,29 @@ FAQ_ITMES = [
     {
         "id":"phone",
         "question":"大堂电话是什么",
-        "answer":"我们的电话是010-87621252，欢迎您联系"
+        "answer":"我们的电话是010-87621252,欢迎您联系"
     },
     {
         "id":"work_time",
         "question":"营业时间是什么时候",
-        "answer":"我们的营业时间是：周日至周四：早10点至晚21点，周五周六：早10点至晚23点。欢迎您来哦🙂"
+        "answer":"我们的营业时间是:周日至周四:早10点至晚21点,周五周六:早10点至晚23点。欢迎您来哦🙂"
     }
 ]
 
 def sync_faq_items_to_redis():
     """
-    将FAQ_ITMES中的数据，同步到Redis中
+    将FAQ_ITMES中的数据,同步到Redis中
     """
     
     
     # 1、获取到client和pipeline对象
     from redis import Redis
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
 
-    client = Redis.from_url("redis://localhost:6379",decode_responses=True)
+    # 本机 6379 被禅道自带的 Redis 占用，改为从 .env 读取 REDIS_URL
+    client = Redis.from_url(os.getenv("REDIS_URL", "redis://localhost:6379"),decode_responses=True)
     pipeline = client.pipeline()
     # 2、使用pipeline，将所有数据，批量写入到Redis的 hash map中，以及将所有的key，添加到一个set中
 
@@ -98,4 +102,4 @@ def sync_faq_items_to_redis():
 #     """
 
 if __name__ == "__main__":
-    
+    sync_faq_items_to_redis()
